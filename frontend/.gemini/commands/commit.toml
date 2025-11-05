@@ -1,0 +1,10 @@
+name = "commit"
+description = "Git의 staged된 변경사항을 주어진 메시지와 함께 commit합니다."
+executable = "shell"
+prompt = "git add . && git commit -m '{{message}}'"
+
+[[arguments]]
+name = "message"
+description = "커밋 메시지"
+type = "string"
+required = true
