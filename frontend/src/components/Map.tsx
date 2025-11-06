@@ -18,8 +18,8 @@ const Map: React.FC = () => {
     script.onload = () => {
       if (mapElement.current) {
         const map = new window.naver.maps.Map(mapElement.current, {
-          center: new window.naver.maps.LatLng(37.5665, 126.9780),
-          zoom: 10,
+          center: new window.naver.maps.LatLng(37.4652845, 126.87958),
+          zoom: 15,
         });
       }
     };
