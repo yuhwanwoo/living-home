@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = () => {
 
           {/* Center: Menu */}
           <div className="flex justify-center flex-grow">
-            <a href="/" className="text-gray-600 hover:text-gray-900 px-3 py-2">지도 home</a>
+            <a href="/map" className="text-gray-600 hover:text-gray-900 px-3 py-2">지도 home</a>
             <a href="#" className="text-gray-600 hover:text-gray-900 px-3 py-2">메뉴 1</a>
             <a href="#" className="text-gray-600 hover:text-gray-900 px-3 py-2">메뉴 2</a>
             <a href="#" className="text-gray-600 hover:text-gray-900 px-3 py-2">메뉴 3</a>
