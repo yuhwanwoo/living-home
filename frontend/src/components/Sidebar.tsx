@@ -43,9 +43,10 @@ const apartments: Apartment[] = [
     lng: 127.015,
     polygon: [
       { lat: 37.514, lng: 127.014 },
-      { lat: 37.516, lng: 127.014 },
       { lat: 37.516, lng: 127.016 },
-      { lat: 37.514, lng: 127.016 },
+      { lat: 37.516, lng: 127.012 },
+      { lat: 37.514, lng: 127.011 },
+      { lat: 37.513, lng: 127.014 },
     ],
   },
   {
