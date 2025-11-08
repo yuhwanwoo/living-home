@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Apartment } from '../pages/MapPage';
+import Journal from './Journal';
 
 declare global {
   interface Window {
@@ -15,6 +16,7 @@ const Map: React.FC<MapProps> = ({ selectedApartment }) => {
   const mapElement = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
   const polygonRef = useRef<any>(null);
+  const [isJournalOpen, setIsJournalOpen] = useState(false);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -39,32 +41,45 @@ const Map: React.FC<MapProps> = ({ selectedApartment }) => {
 
   useEffect(() => {
     if (mapRef.current && selectedApartment) {
-      const { lat, lng, polygon } = selectedApartment;
-      const newCenter = new window.naver.maps.LatLng(lat, lng);
-      mapRef.current.setCenter(newCenter);
-      mapRef.current.setZoom(17);
+      setTimeout(() => {
+        const { lat, lng, polygon } = selectedApartment;
+        const newCenter = new window.naver.maps.LatLng(lat, lng);
+        mapRef.current.setCenter(newCenter);
+        mapRef.current.setZoom(17);
 
-      if (polygonRef.current) {
-        polygonRef.current.setMap(null);
-      }
+        if (polygonRef.current) {
+          polygonRef.current.setMap(null);
+        }
 
-      const newPolygon = new window.naver.maps.Polygon({
-        map: mapRef.current,
-        paths: [
-          polygon.map((p) => new window.naver.maps.LatLng(p.lat, p.lng)),
-        ],
-        fillColor: '#ff0000',
-        fillOpacity: 0.3,
-        strokeColor: '#ff0000',
-        strokeOpacity: 0.6,
-        strokeWeight: 3,
-      });
+        const newPolygon = new window.naver.maps.Polygon({
+          map: mapRef.current,
+          paths: [
+            polygon.map((p) => new window.naver.maps.LatLng(p.lat, p.lng)),
+          ],
+          fillColor: '#ff0000',
+          fillOpacity: 0.3,
+          strokeColor: '#ff0000',
+          strokeOpacity: 0.6,
+          strokeWeight: 3,
+          clickable: true,
+        });
 
-      polygonRef.current = newPolygon;
+        window.naver.maps.Event.addListener(newPolygon, 'click', () => {
+          console.log('Polygon clicked!');
+          setIsJournalOpen(true);
+        });
+
+        polygonRef.current = newPolygon;
+      }, 100);
     }
   }, [selectedApartment]);
 
-  return <div ref={mapElement} style={{ width: '100%', height: '100%' }} />;
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <div ref={mapElement} style={{ width: '100%', height: '100%' }} />
+      {isJournalOpen && <Journal onClose={() => setIsJournalOpen(false)} />}
+    </div>
+  );
 };
 
 export default Map;
