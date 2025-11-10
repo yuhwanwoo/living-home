@@ -10,6 +10,7 @@ export interface Apartment {
   lat: number;
   lng: number;
   polygon: { lat: number; lng: number }[];
+  description: string;
 }
 
 const MapPage: React.FC = () => {
@@ -21,7 +22,10 @@ const MapPage: React.FC = () => {
     <div className="flex h-screen">
       <Sidebar onApartmentClick={setSelectedApartment} />
       <div className="flex-1 h-full">
-        <Map selectedApartment={selectedApartment} />
+        <Map
+          selectedApartment={selectedApartment}
+          onClearSelection={() => setSelectedApartment(null)}
+        />
       </div>
     </div>
   );

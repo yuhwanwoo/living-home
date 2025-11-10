@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Apartment } from '../pages/MapPage';
-import Journal from './Journal';
+import Description from './Description';
 
 declare global {
   interface Window {
@@ -10,13 +10,16 @@ declare global {
 
 interface MapProps {
   selectedApartment: Apartment | null;
+  onClearSelection: () => void;
 }
 
-const Map: React.FC<MapProps> = ({ selectedApartment }) => {
+const Map: React.FC<MapProps> = ({
+  selectedApartment,
+  onClearSelection,
+}) => {
   const mapElement = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
   const polygonRef = useRef<any>(null);
-  const [isJournalOpen, setIsJournalOpen] = useState(false);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -65,19 +68,26 @@ const Map: React.FC<MapProps> = ({ selectedApartment }) => {
         });
 
         window.naver.maps.Event.addListener(newPolygon, 'click', () => {
-          console.log('Polygon clicked!');
-          setIsJournalOpen(true);
+          console.log('Polygon clicked for apartment:', selectedApartment.name);
+          // TODO: Decide what should happen on polygon click.
+          // Maybe re-open the description if it was closed,
+          // or select the apartment if it's not selected.
         });
 
         polygonRef.current = newPolygon;
       }, 100);
+    } else if (polygonRef.current) {
+      // 아파트 선택이 해제되면 폴리곤을 숨깁니다.
+      polygonRef.current.setMap(null);
     }
   }, [selectedApartment]);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div ref={mapElement} style={{ width: '100%', height: '100%' }} />
-      {isJournalOpen && <Journal onClose={() => setIsJournalOpen(false)} />}
+      {selectedApartment && (
+        <Description apartment={selectedApartment} onClose={onClearSelection} />
+      )}
     </div>
   );
 };
