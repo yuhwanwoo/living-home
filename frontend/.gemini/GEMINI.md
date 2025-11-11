@@ -44,3 +44,7 @@ React + TypeScript + Tailwind CSS
 - API 호출에는 오류 처리 포함
 - 폼 유효성 검사에는 react-hook-form + zod 사용
 - 모든 비동기 작업에는 React Query 사용
+
+## 네이버 지도 API 사용
+https://navermaps.github.io/maps.js.ncp/docs/tutorial-digest.example.html
+- 이 문서를 토대로 작업할 예정이야
