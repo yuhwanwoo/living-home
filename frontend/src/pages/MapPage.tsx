@@ -11,6 +11,7 @@ export interface Apartment {
   lng: number;
   polygon: { lat: number; lng: number }[];
   description: string;
+  category: '대장단지' | '재개발' | '아파트';
 }
 
 const MapPage: React.FC = () => {

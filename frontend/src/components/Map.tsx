@@ -54,14 +54,23 @@ const Map: React.FC<MapProps> = ({
           polygonRef.current.setMap(null);
         }
 
+        const categoryColors = {
+          대장단지: '#ff0000',
+          재개발: '#0000ff',
+          아파트: '#00ff00',
+        };
+
+        const color =
+          categoryColors[selectedApartment.category] || '#000000';
+
         const newPolygon = new window.naver.maps.Polygon({
           map: mapRef.current,
           paths: [
             polygon.map((p) => new window.naver.maps.LatLng(p.lat, p.lng)),
           ],
-          fillColor: '#ff0000',
+          fillColor: color,
           fillOpacity: 0.3,
-          strokeColor: '#ff0000',
+          strokeColor: color,
           strokeOpacity: 0.6,
           strokeWeight: 3,
           clickable: true,
