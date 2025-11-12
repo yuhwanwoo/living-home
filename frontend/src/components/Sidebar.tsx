@@ -26,9 +26,9 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   return (
-    <div className="w-96 h-full bg-white p-4 shadow-lg">
+    <div className="w-96 h-full bg-white p-4 shadow-lg flex flex-col">
       <h2 className="text-xl font-bold mb-4">아파트 목록</h2>
-      <ul>
+      <ul className="overflow-y-auto">
         {apartments.map((apartment) => (
           <li
             key={apartment.id}
