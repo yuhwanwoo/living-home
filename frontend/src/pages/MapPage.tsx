@@ -493,6 +493,7 @@ const MapPage: React.FC = () => {
         onApartmentClick={setSelectedApartment}
       />
       <div className="flex-1 h-full">
+        <p>Naver Map Client ID: {process.env.REACT_APP_NAVER_MAP_CLIENT_ID}</p>
         <NaverMap
           apartments={apartments}
           selectedApartment={selectedApartment}
