@@ -40,7 +40,7 @@ const apartments: Apartment[] = [
   {
     id: 2,
     name: '하안 주공 4단지',
-    price: { '59': '6.3억' },
+    price: { '59': '6.3억', '84': '-' },
     address: '경기도 광명시 하안동',
     lat: 37.46433,
     lng: 126.877251,
@@ -61,7 +61,7 @@ const apartments: Apartment[] = [
   {
     id: 3,
     name: '하안 주공 11단지',
-    price: { '49': '5.9억' },
+    price: { '49': '5.9억', '84': '-' },
     address: '경기도 광명시 하안동',
     lat: 37.464773,
     lng: 126.881659,
