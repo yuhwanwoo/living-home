@@ -61,7 +61,7 @@ const apartments: Apartment[] = [
   {
     id: 3,
     name: '하안 주공 11단지',
-    price: { '49': '5.9억', '84': '-' },
+    price: { '59': '(49) 5.9억', '84': '-' },
     address: '경기도 광명시 하안동',
     lat: 37.464773,
     lng: 126.881659,
@@ -80,7 +80,7 @@ const apartments: Apartment[] = [
   {
     id: 4,
     name: '하안주공 10단지',
-    price: { '59': '6억' },
+    price: { '59': '6억', '84': '-' },
     address: '경기도 광명시 하안동',
     lat: 37.4652845,
     lng: 126.87958,
@@ -183,7 +183,7 @@ const apartments: Apartment[] = [
   {
     id: 10,
     name: '하안주공1단지아파트',
-    price: { '49': '5억' },
+    price: { '59': '(49)5억', '84': '-' },
     address: '경기도 광명시 안현로 15',
     lat: 37.465607,
     lng: 126.873368,
@@ -204,7 +204,7 @@ const apartments: Apartment[] = [
   {
     id: 11,
     name: '하안주공2단지아파트',
-    price: { '59': '6억' },
+    price: { '59': '6억', '84': '-' },
     address: '경기도 광명시 하안동 681-4',
     lat: 37.466229,
     lng: 126.875644,
@@ -222,7 +222,7 @@ const apartments: Apartment[] = [
   {
     id: 12,
     name: '하안주공9단지아파트',
-    price: { '59': '6억' },
+    price: { '59': '6억', '84': '-' },
     address: '경기도 광명시 하안로 364',
     lat: 37.467408,
     lng: 126.877578,
@@ -240,7 +240,7 @@ const apartments: Apartment[] = [
   {
     id: 13,
     name: '하안주공3단지아파트',
-    price: { '49': '5.1억' },
+    price: { '59': '(49)5.1억', '84': '-' },
     address: '경기도 광명시 안현로 34',
     lat: 37.462854,
     lng: 126.875872,
@@ -261,7 +261,7 @@ const apartments: Apartment[] = [
   {
     id: 14,
     name: '하안주공6단지아파트',
-    price: { '49': '6억' },
+    price: { '59': '(49)6억', '84': '-' },
     address: '경기도 광명시 금당로 11',
     lat: 37.460095,
     lng: 126.877992,
@@ -278,7 +278,7 @@ const apartments: Apartment[] = [
   {
     id: 15,
     name: '하안주공7단지아파트',
-    price: { '59': '6억' },
+    price: { '59': '6억', '84': '-' },
     address: '경기도 광명시 금당로 13',
     lat: 37.459665,
     lng: 126.880437,
@@ -295,7 +295,7 @@ const apartments: Apartment[] = [
   {
     id: 16,
     name: '하안주공13단지아파트',
-    price: { '59': '-' },
+    price: { '59': '-', '84': '-' },
     address: '경기도 광명시 하안로 237',
     lat: 37.459011,
     lng: 126.884651,
