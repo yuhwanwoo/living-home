@@ -1,30 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Apartment } from '../pages/MapPage';
 
 interface SidebarProps {
   apartments: Apartment[];
+  selectedApartment: Apartment | null;
   onApartmentClick: (apartment: Apartment) => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
   apartments,
+  selectedApartment,
   onApartmentClick,
 }) => {
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-
-  useEffect(() => {
-    const firstApartment = apartments[0];
-    if (firstApartment) {
-      handleApartmentClick(firstApartment);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apartments, onApartmentClick]);
-
-  const handleApartmentClick = (apartment: Apartment) => {
-    onApartmentClick(apartment);
-    setSelectedId(apartment.id);
-  };
-
   return (
     <div className="w-96 h-full bg-white p-4 shadow-lg flex flex-col">
       <h2 className="text-xl font-bold mb-4">아파트 목록</h2>
@@ -33,11 +20,11 @@ const Sidebar: React.FC<SidebarProps> = ({
           <li
             key={apartment.id}
             className={`p-4 mb-2 rounded-lg cursor-pointer transition-colors ${
-              selectedId === apartment.id
+              selectedApartment?.id === apartment.id
                 ? 'bg-blue-200'
                 : 'hover:bg-gray-100'
             }`}
-            onClick={() => handleApartmentClick(apartment)}
+            onClick={() => onApartmentClick(apartment)}
           >
             <h3 className="font-bold text-lg">{apartment.name}</h3>
             <div className="text-gray-600">

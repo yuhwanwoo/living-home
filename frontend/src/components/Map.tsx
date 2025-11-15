@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot, Root } from 'react-dom/client';
-import { Apartment } from '../pages/MapPage';
+import { Apartment, ApartmentDataByDate } from '../pages/MapPage';
 import Description from './Description';
 import PriceMarker from './PriceMarker';
 
@@ -13,6 +13,7 @@ declare global {
 
 interface MapProps {
   apartments: Apartment[];
+  apartmentData: ApartmentDataByDate;
   selectedApartment: Apartment | null;
   onClearSelection: () => void;
   onApartmentClick: (apartment: Apartment) => void;
@@ -20,6 +21,7 @@ interface MapProps {
 
 const NaverMap: React.FC<MapProps> = ({
   apartments,
+  apartmentData,
   selectedApartment,
   onClearSelection,
   onApartmentClick,
@@ -156,7 +158,11 @@ const NaverMap: React.FC<MapProps> = ({
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div ref={mapElement} style={{ width: '100%', height: '100%' }} />
       {selectedApartment && (
-        <Description apartment={selectedApartment} onClose={onClearSelection} />
+        <Description
+          apartment={selectedApartment}
+          apartmentData={apartmentData}
+          onClose={onClearSelection}
+        />
       )}
     </div>
   );

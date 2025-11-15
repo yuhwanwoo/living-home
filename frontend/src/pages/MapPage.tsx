@@ -17,7 +17,11 @@ export interface Apartment {
   category: '대장단지' | '재개발' | '아파트';
 }
 
-const apartments: Apartment[] = [
+export interface ApartmentDataByDate {
+  [date: string]: Apartment[];
+}
+
+const initialApartments: Apartment[] = [
   {
     id: 1,
     name: '철산자이 더헤리티지',
@@ -481,6 +485,26 @@ const apartments: Apartment[] = [
   }
 ];
 
+const apartmentData: ApartmentDataByDate = {
+  '2025-11-13': JSON.parse(JSON.stringify(initialApartments)),
+  '2025-11-12': JSON.parse(JSON.stringify(initialApartments)),
+  '2025-11-11': JSON.parse(JSON.stringify(initialApartments)),
+};
+
+// Demo data modification
+const dataFor12 = apartmentData['2025-11-12'];
+if (dataFor12?.[0]?.price) {
+  dataFor12[0].price['59'] = '13.8억';
+  dataFor12[0].price['84'] = '16.8억';
+}
+const dataFor11 = apartmentData['2025-11-11'];
+if (dataFor11?.[0]?.price) {
+  dataFor11[0].price['59'] = '13.5억';
+  dataFor11[0].price['84'] = '16.5억';
+}
+
+const latestApartments = apartmentData['2025-11-13'] || [];
+
 const MapPage: React.FC = () => {
   const [selectedApartment, setSelectedApartment] = useState<Apartment | null>(
     null
@@ -489,12 +513,14 @@ const MapPage: React.FC = () => {
   return (
     <div className="flex h-screen">
       <Sidebar
-        apartments={apartments}
+        apartments={latestApartments}
+        selectedApartment={selectedApartment}
         onApartmentClick={setSelectedApartment}
       />
       <div className="flex-1 h-full">
         <NaverMap
-          apartments={apartments}
+          apartments={latestApartments}
+          apartmentData={apartmentData}
           selectedApartment={selectedApartment}
           onClearSelection={() => setSelectedApartment(null)}
           onApartmentClick={setSelectedApartment}
