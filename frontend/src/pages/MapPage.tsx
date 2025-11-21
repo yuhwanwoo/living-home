@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import NaverMap from '../components/Map';
 import Sidebar from '../components/Sidebar';
+import SearchBar from '../components/SearchBar';
+import DetailPanel from '../components/DetailPanel';
+import Header from '../components/Header';
 
 export interface Apartment {
   id: number;
@@ -50,13 +53,13 @@ const initialApartments: Apartment[] = [
     lng: 126.877251,
     polygon: [
       { lat: 37.465544, lng: 126.877072 },
-        { lat: 37.463726, lng: 126.878633 },
-        { lat: 37.463403, lng: 126.878330 },
-        { lat: 37.462815, lng: 126.878846 },
-        { lat: 37.462171, lng: 126.877644 },
-        { lat: 37.462741, lng: 126.877131 },
-        { lat: 37.462950, lng: 126.877564 },
-        { lat: 37.464895, lng: 126.875867 }
+      { lat: 37.463726, lng: 126.878633 },
+      { lat: 37.463403, lng: 126.878330 },
+      { lat: 37.462815, lng: 126.878846 },
+      { lat: 37.462171, lng: 126.877644 },
+      { lat: 37.462741, lng: 126.877131 },
+      { lat: 37.462950, lng: 126.877564 },
+      { lat: 37.464895, lng: 126.875867 }
     ],
     description:
       '하안동 구시가지 중심부에 위치하며, 재건축 이슈가 있는 단지입니다. 인근 하안도서관, 상업지구 이용이 편리합니다.',
@@ -70,8 +73,8 @@ const initialApartments: Apartment[] = [
     lat: 37.464773,
     lng: 126.881659,
     polygon: [
-        { lat: 37.465844, lng: 126.882770 },
-          { lat: 37.464817, lng: 126.883613 },
+      { lat: 37.465844, lng: 126.882770 },
+      { lat: 37.464817, lng: 126.883613 },
       { lat: 37.463274, lng: 126.880906 },
       { lat: 37.463555, lng: 126.880591 },
       { lat: 37.463198, lng: 126.879798 },
@@ -126,9 +129,9 @@ const initialApartments: Apartment[] = [
     lng: 126.872652,
     polygon: [
       { lat: 37.476571, lng: 126.870126 },
-        { lat: 37.477607, lng: 126.873866 },
-        { lat: 37.474632, lng: 126.875553 },
-        { lat: 37.473972, lng: 126.871220 }
+      { lat: 37.477607, lng: 126.873866 },
+      { lat: 37.474632, lng: 126.875553 },
+      { lat: 37.473972, lng: 126.871220 }
     ],
     description: '철산동 재건축 사업이 완료된 인근 단지들처럼 향후 재건축 잠재력이 높은 곳입니다. 구시가지 상권 접근성이 좋습니다.',
     category: '아파트',
@@ -142,11 +145,11 @@ const initialApartments: Apartment[] = [
     lng: 126.869121,
     polygon: [
       { lat: 37.473416, lng: 126.867449 },
-        { lat: 37.473749, lng: 126.871130 },
-        { lat: 37.473214, lng: 126.871264 },
-        { lat: 37.473053, lng: 126.870192 },
-        { lat: 37.470424, lng: 126.869923 },
-        { lat: 37.470180, lng: 126.868671 }
+      { lat: 37.473749, lng: 126.871130 },
+      { lat: 37.473214, lng: 126.871264 },
+      { lat: 37.473053, lng: 126.870192 },
+      { lat: 37.470424, lng: 126.869923 },
+      { lat: 37.470180, lng: 126.868671 }
     ],
     description: '2010년대 초반 입주한 철산동의 비교적 신축급 브랜드 아파트입니다. 광명시청 및 철산역 인근 편의시설 이용이 편리합니다.',
     category: '아파트',
@@ -160,10 +163,10 @@ const initialApartments: Apartment[] = [
     lng: 126.874680,
     polygon: [
       { lat: 37.473949, lng: 126.873039 },
-        { lat: 37.474053, lng: 126.874370 },
-        { lat: 37.470947, lng: 126.876562 },
-        { lat: 37.469708, lng: 126.873930 },
-        { lat: 37.471297, lng: 126.872879 }
+      { lat: 37.474053, lng: 126.874370 },
+      { lat: 37.470947, lng: 126.876562 },
+      { lat: 37.469708, lng: 126.873930 },
+      { lat: 37.471297, lng: 126.872879 }
     ],
     description: '2009년 입주한 대규모 브랜드 단지입니다. 주변 철산중앙로 상권과 광명시청, 학군이 잘 형성되어 있어 선호도가 높습니다.',
     category: '아파트',
@@ -177,9 +180,9 @@ const initialApartments: Apartment[] = [
     lng: 126.872094,
     polygon: [
       { lat: 37.470213, lng: 126.870458 },
-        { lat: 37.467679, lng: 126.871452 },
-        { lat: 37.468538, lng: 126.874455 },
-        { lat: 37.470972, lng: 126.872780 }
+      { lat: 37.467679, lng: 126.871452 },
+      { lat: 37.468538, lng: 126.874455 },
+      { lat: 37.470972, lng: 126.872780 }
     ],
     description: '하안동에 위치한 살기 좋은 아파트 단지입니다.',
     category: '아파트',
@@ -193,14 +196,14 @@ const initialApartments: Apartment[] = [
     lng: 126.873368,
     polygon: [
       { lat: 37.467280, lng: 126.874136 },
-        { lat: 37.466674, lng: 126.874875 },
+      { lat: 37.466674, lng: 126.874875 },
 
-        { lat: 37.466055,  lng: 126.874669 },
-        { lat: 37.464949,  lng: 126.875634 },
+      { lat: 37.466055, lng: 126.874669 },
+      { lat: 37.464949, lng: 126.875634 },
 
-        { lat: 37.462754, lng: 126.873060 },
-        { lat: 37.463623, lng: 126.871764 },
-        { lat: 37.464691, lng: 126.872888 }
+      { lat: 37.462754, lng: 126.873060 },
+      { lat: 37.463623, lng: 126.871764 },
+      { lat: 37.464691, lng: 126.872888 }
     ],
     description: '하안동의 주공 1단지 아파트입니다.',
     category: '아파트',
@@ -214,11 +217,11 @@ const initialApartments: Apartment[] = [
     lng: 126.875644,
     polygon: [
       { lat: 37.467894, lng: 126.875040 },
-        { lat: 37.465700, lng: 126.876970 },
-        { lat: 37.464997, lng: 126.875728 },
-        { lat: 37.466113, lng: 126.874717 },
-        { lat: 37.466685, lng: 126.874927 },
-        { lat: 37.467471, lng: 126.874289 }
+      { lat: 37.465700, lng: 126.876970 },
+      { lat: 37.464997, lng: 126.875728 },
+      { lat: 37.466113, lng: 126.874717 },
+      { lat: 37.466685, lng: 126.874927 },
+      { lat: 37.467471, lng: 126.874289 }
     ],
     description: '하안동의 주공 2단지 아파트입니다.',
     category: '아파트',
@@ -232,11 +235,11 @@ const initialApartments: Apartment[] = [
     lng: 126.877578,
     polygon: [
       { lat: 37.468833, lng: 126.878442 },
-        { lat: 37.467281, lng: 126.879876 },
-        { lat: 37.465846, lng: 126.877121 },
-        { lat: 37.468453, lng: 126.874780 },
-        { lat: 37.468836, lng: 126.875661 },
-        { lat: 37.467964, lng: 126.876470 }
+      { lat: 37.467281, lng: 126.879876 },
+      { lat: 37.465846, lng: 126.877121 },
+      { lat: 37.468453, lng: 126.874780 },
+      { lat: 37.468836, lng: 126.875661 },
+      { lat: 37.467964, lng: 126.876470 }
     ],
     description: '하안동의 주공 9단지 아파트입니다.',
     category: '아파트',
@@ -250,14 +253,14 @@ const initialApartments: Apartment[] = [
     lng: 126.875872,
     polygon: [
       { lat: 37.464774, lng: 126.875726 },
-        { lat: 37.462975, lng: 126.877250 },
-        { lat: 37.462811, lng: 126.876992 },
-        { lat: 37.462036, lng: 126.877538 },
-        { lat: 37.461133, lng: 126.875526 },
-        { lat: 37.462050, lng: 126.874190 },
-        { lat: 37.462534, lng: 126.875150 },
-        { lat: 37.463735, lng: 126.874274 },
-        { lat: 37.464407, lng: 126.874935 }
+      { lat: 37.462975, lng: 126.877250 },
+      { lat: 37.462811, lng: 126.876992 },
+      { lat: 37.462036, lng: 126.877538 },
+      { lat: 37.461133, lng: 126.875526 },
+      { lat: 37.462050, lng: 126.874190 },
+      { lat: 37.462534, lng: 126.875150 },
+      { lat: 37.463735, lng: 126.874274 },
+      { lat: 37.464407, lng: 126.874935 }
     ],
     description: '하안동의 주공 3단지 아파트입니다.',
     category: '아파트',
@@ -271,10 +274,10 @@ const initialApartments: Apartment[] = [
     lng: 126.877992,
     polygon: [
       { lat: 37.461113, lng: 126.878279 },
-        { lat: 37.460234, lng: 126.878905 },
-        { lat: 37.459048, lng: 126.878987 },
-        { lat: 37.458621, lng: 126.877987 },
-        { lat: 37.460262, lng: 126.876565 }
+      { lat: 37.460234, lng: 126.878905 },
+      { lat: 37.459048, lng: 126.878987 },
+      { lat: 37.458621, lng: 126.877987 },
+      { lat: 37.460262, lng: 126.876565 }
     ],
     description: '하안동의 주공 6단지 아파트입니다.',
     category: '아파트',
@@ -288,10 +291,10 @@ const initialApartments: Apartment[] = [
     lng: 126.880437,
     polygon: [
       { lat: 37.461126, lng: 126.880858 },
-        { lat: 37.459417, lng: 126.882218 },
-        { lat: 37.458273, lng: 126.880070 },
-        { lat: 37.459341, lng: 126.879112 },
-        { lat: 37.460293, lng: 126.879209 }
+      { lat: 37.459417, lng: 126.882218 },
+      { lat: 37.458273, lng: 126.880070 },
+      { lat: 37.459341, lng: 126.879112 },
+      { lat: 37.460293, lng: 126.879209 }
     ],
     description: '하안동의 주공 7단지 아파트입니다.',
     category: '아파트',
@@ -305,15 +308,15 @@ const initialApartments: Apartment[] = [
     lng: 126.884651,
     polygon: [
       { lat: 37.461044, lng: 126.885581 },
-        { lat: 37.460701, lng: 126.885872 },
-        { lat: 37.460243, lng: 126.884941 },
-        { lat: 37.459691, lng: 126.885344 },
-        { lat: 37.459037, lng: 126.885266 },
-        { lat: 37.458860, lng: 126.886110 },
-        { lat: 37.458106, lng: 126.885955 },
-        { lat: 37.458310, lng: 126.885016 },
-        { lat: 37.457770, lng: 126.883986 },
-        { lat: 37.459375, lng: 126.882618 }
+      { lat: 37.460701, lng: 126.885872 },
+      { lat: 37.460243, lng: 126.884941 },
+      { lat: 37.459691, lng: 126.885344 },
+      { lat: 37.459037, lng: 126.885266 },
+      { lat: 37.458860, lng: 126.886110 },
+      { lat: 37.458106, lng: 126.885955 },
+      { lat: 37.458310, lng: 126.885016 },
+      { lat: 37.457770, lng: 126.883986 },
+      { lat: 37.459375, lng: 126.882618 }
     ],
     description: '하안동의 주공 13단지 아파트입니다.',
     category: '아파트',
@@ -327,12 +330,12 @@ const initialApartments: Apartment[] = [
     lng: 126.882263,
     polygon: [
       { lat: 37.459267, lng: 126.882377 },
-        { lat: 37.456357, lng: 126.884972 },
-        { lat: 37.455902, lng: 126.883290 },
-        { lat: 37.456501, lng: 126.882857 },
-        { lat: 37.456567, lng: 126.880546 },
-        { lat: 37.457001, lng: 126.881064 },
-        { lat: 37.458077, lng: 126.880173 }
+      { lat: 37.456357, lng: 126.884972 },
+      { lat: 37.455902, lng: 126.883290 },
+      { lat: 37.456501, lng: 126.882857 },
+      { lat: 37.456567, lng: 126.880546 },
+      { lat: 37.457001, lng: 126.881064 },
+      { lat: 37.458077, lng: 126.880173 }
     ],
     description: '하안동의 주공 8단지 아파트입니다.',
     category: '아파트',
@@ -346,11 +349,11 @@ const initialApartments: Apartment[] = [
     lng: 126.886727,
     polygon: [
       { lat: 37.461236, lng: 126.886794 },
-        { lat: 37.460077, lng: 126.887799 },
-        { lat: 37.459352, lng: 126.886518 },
-        { lat: 37.459493, lng: 126.885554 },
-        { lat: 37.459817, lng: 126.885528 },
-        { lat: 37.460332, lng: 126.885115 }
+      { lat: 37.460077, lng: 126.887799 },
+      { lat: 37.459352, lng: 126.886518 },
+      { lat: 37.459493, lng: 126.885554 },
+      { lat: 37.459817, lng: 126.885528 },
+      { lat: 37.460332, lng: 126.885115 }
     ],
     description: '독산동의 주공 14단지 아파트입니다.',
     category: '아파트',
@@ -364,10 +367,10 @@ const initialApartments: Apartment[] = [
     lng: 126.886956,
     polygon: [
       { lat: 37.459012, lng: 126.886934 },
-        { lat: 37.457415, lng: 126.888228 },
-        { lat: 37.456762, lng: 126.886421 },
-        { lat: 37.457761, lng: 126.885876 },
-        { lat: 37.458860, lng: 126.886353 }
+      { lat: 37.457415, lng: 126.888228 },
+      { lat: 37.456762, lng: 126.886421 },
+      { lat: 37.457761, lng: 126.885876 },
+      { lat: 37.458860, lng: 126.886353 }
     ],
     description: '독산동의 주공 13단지 아파트입니다.',
     category: '아파트',
@@ -381,11 +384,11 @@ const initialApartments: Apartment[] = [
     lng: 126.870053,
     polygon: [
       { lat: 37.480511, lng: 126.867960 },
-        { lat: 37.476807, lng: 126.869441 },
-        { lat: 37.477693, lng: 126.872434 },
-        { lat: 37.478570, lng: 126.871952 },
-        { lat: 37.478936, lng: 126.873314 },
-        { lat: 37.481439, lng: 126.872123 }
+      { lat: 37.476807, lng: 126.869441 },
+      { lat: 37.477693, lng: 126.872434 },
+      { lat: 37.478570, lng: 126.871952 },
+      { lat: 37.478936, lng: 126.873314 },
+      { lat: 37.481439, lng: 126.872123 }
     ],
     description: '철산동의 주공 13단지 아파트입니다.',
     category: '대장단지',
@@ -510,14 +513,18 @@ const MapPage: React.FC = () => {
     null
   );
 
+  const handleSearch = (query: string) => {
+    console.log('Search query:', query);
+    // Implement search logic here later
+  };
+
   return (
-    <div className="flex h-screen">
-      <Sidebar
-        apartments={latestApartments}
-        selectedApartment={selectedApartment}
-        onApartmentClick={setSelectedApartment}
-      />
-      <div className="flex-1 h-full">
+    <div className="relative h-screen w-full bg-slate-900 overflow-hidden">
+      {/* Header */}
+      <Header />
+
+      {/* Map Background */}
+      <div className="absolute inset-0 z-0">
         <NaverMap
           apartments={latestApartments}
           apartmentData={apartmentData}
@@ -526,6 +533,25 @@ const MapPage: React.FC = () => {
           onApartmentClick={setSelectedApartment}
         />
       </div>
+
+      {/* Floating UI Elements */}
+      <Sidebar
+        apartments={latestApartments}
+        selectedApartment={selectedApartment}
+        onApartmentClick={setSelectedApartment}
+      />
+
+      <div className="absolute top-20 left-6 z-40">
+        <SearchBar onSearch={handleSearch} />
+      </div>
+
+      {selectedApartment && (
+        <DetailPanel
+          apartment={selectedApartment}
+          apartmentData={apartmentData}
+          onClose={() => setSelectedApartment(null)}
+        />
+      )}
     </div>
   );
 };

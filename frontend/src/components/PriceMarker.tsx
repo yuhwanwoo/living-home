@@ -6,33 +6,30 @@ interface PriceMarkerProps {
     '59'?: string;
     '84'?: string;
   };
+  onClick?: () => void;
 }
 
-const PriceMarker: React.FC<PriceMarkerProps> = ({ name, price }) => {
+const PriceMarker: React.FC<PriceMarkerProps> = ({ name, price, onClick }) => {
+  const priceKeys = Object.keys(price);
+
   return (
-    <div className="relative transform -translate-x-1/2 -translate-y-full" style={{ top: '-10px' }}>
-      <div className="bg-blue-600 text-white font-bold rounded-lg px-3 py-2 shadow-lg text-center">
-        <div className="text-sm whitespace-nowrap">{name}</div>
-        <hr className="border-t border-white/50 my-1" />
-        <div className="text-xs flex flex-col items-center">
-          {price['59'] && (
-            <div className="whitespace-nowrap">59형: {price['59']}</div>
-          )}
-          {price['84'] && (
-            <div className="whitespace-nowrap">84형: {price['84']}</div>
-          )}
-        </div>
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick?.();
+      }}
+      className="glass-panel px-3 py-2 rounded-xl flex flex-col items-center transform transition-transform hover:scale-110 cursor-pointer relative"
+    >
+      <div className="text-xs font-bold text-white mb-1 whitespace-nowrap">{name}</div>
+      <div className="flex gap-2 text-xs">
+        {priceKeys.map((key) => (
+          <span key={key} className={`font-bold ${key === '59' ? 'text-sky-400' : 'text-teal-400'}`}>
+            {key}형: {price[key as keyof typeof price]}
+          </span>
+        ))}
       </div>
-      <div
-        className="absolute left-1/2 -translate-x-1/2"
-        style={{
-          width: 0,
-          height: 0,
-          borderLeft: '8px solid transparent',
-          borderRight: '8px solid transparent',
-          borderTop: '8px solid #2563EB', // Corresponds to bg-blue-600
-        }}
-      />
+      {/* Triangle pointer */}
+      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-slate-900/70"></div>
     </div>
   );
 };

@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { Apartment, ApartmentDataByDate } from '../pages/MapPage';
-import Description from './Description';
 import PriceMarker from './PriceMarker';
 
 declare global {
@@ -48,8 +47,13 @@ const NaverMap: React.FC<MapProps> = ({
     script.onload = () => {
       if (mapElement.current && !mapRef.current) {
         const map = new window.naver.maps.Map(mapElement.current, {
-          center: new window.naver.maps.LatLng(37.5124, 127.0122),
-          zoom: 12,
+          center: new window.naver.maps.LatLng(37.468, 126.875), // Centered on Ha-an dong
+          zoom: 15,
+          mapTypeId: window.naver.maps.MapTypeId.NORMAL,
+          scaleControl: false,
+          logoControl: false,
+          mapDataControl: false,
+          zoomControl: false, // We can add custom zoom controls later
         });
         mapRef.current = map;
         setMapInitialized(true);
@@ -102,15 +106,16 @@ const NaverMap: React.FC<MapProps> = ({
     polygonsRef.current.forEach((polygon) => polygon.setMap(null));
     polygonsRef.current.clear();
 
+    // Neon Colors
     const categoryColors = {
-      대장단지: '#ff0000',
-      재개발: '#00ff00',
-      아파트: '#0000ff',
+      대장단지: '#38bdf8', // Sky 400 (Neon Blue)
+      재개발: '#2dd4bf', // Teal 400 (Neon Teal)
+      아파트: '#818cf8', // Indigo 400 (Soft Purple)
     };
 
     apartments.forEach((apt) => {
       const isSelected = apt.id === selectedApartment?.id;
-      const color = categoryColors[apt.category] || '#000000';
+      const color = categoryColors[apt.category] || '#94a3b8';
 
       const polygon = new window.naver.maps.Polygon({
         map: mapRef.current,
@@ -118,10 +123,10 @@ const NaverMap: React.FC<MapProps> = ({
           apt.polygon.map((p) => new window.naver.maps.LatLng(p.lat, p.lng)),
         ],
         fillColor: color,
-        fillOpacity: isSelected ? 0.7 : 0.3,
+        fillOpacity: isSelected ? 0.6 : 0.2,
         strokeColor: color,
-        strokeOpacity: 0.8,
-        strokeWeight: isSelected ? 4 : 2,
+        strokeOpacity: 0.9,
+        strokeWeight: isSelected ? 3 : 2,
         clickable: true,
       });
 
@@ -129,12 +134,29 @@ const NaverMap: React.FC<MapProps> = ({
         onApartmentClick(apt);
       });
 
+      window.naver.maps.Event.addListener(polygon, 'mouseover', () => {
+        polygon.setOptions({ fillOpacity: 0.6, strokeWeight: 3 });
+      });
+
+      window.naver.maps.Event.addListener(polygon, 'mouseout', () => {
+        if (selectedApartment?.id !== apt.id) {
+          polygon.setOptions({ fillOpacity: 0.2, strokeWeight: 2 });
+        }
+      });
+
       polygonsRef.current.set(apt.id, polygon);
 
       const markerElement = document.createElement('div');
       markerElement.style.position = 'absolute';
+      markerElement.style.zIndex = '100'; // Ensure markers are above polygons
       const root = createRoot(markerElement);
-      root.render(<PriceMarker name={apt.name} price={apt.price} />);
+      root.render(
+        <PriceMarker
+          name={apt.name}
+          price={apt.price}
+          onClick={() => onApartmentClick(apt)}
+        />
+      );
 
       const priceMarker = new (PriceMarkerOverlay as any)(
         new window.naver.maps.LatLng(apt.lat, apt.lng),
@@ -149,21 +171,14 @@ const NaverMap: React.FC<MapProps> = ({
     if (selectedApartment) {
       const { lat, lng } = selectedApartment;
       const newCenter = new window.naver.maps.LatLng(lat, lng);
-      mapRef.current.setCenter(newCenter);
-      mapRef.current.setZoom(17);
+      mapRef.current.panTo(newCenter); // Smooth transition
+      // mapRef.current.setZoom(17); // Keep zoom level or adjust if needed
     }
   }, [mapInitialized, apartments, selectedApartment, onApartmentClick]);
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <div ref={mapElement} style={{ width: '100%', height: '100%' }} />
-      {selectedApartment && (
-        <Description
-          apartment={selectedApartment}
-          apartmentData={apartmentData}
-          onClose={onClearSelection}
-        />
-      )}
+    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
+      <div ref={mapElement} style={{ width: '100%', height: '100%', background: '#0f172a' }} />
     </div>
   );
 };
