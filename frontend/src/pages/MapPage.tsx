@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import NaverMap from '../components/Map';
 import Sidebar from '../components/Sidebar';
 import SearchBar from '../components/SearchBar';
 import DetailPanel from '../components/DetailPanel';
 import Header from '../components/Header';
+import { fetchApartments } from '../api/mockApi';
 
 export interface Apartment {
   id: number;
@@ -24,499 +26,38 @@ export interface ApartmentDataByDate {
   [date: string]: Apartment[];
 }
 
-const initialApartments: Apartment[] = [
-  {
-    id: 1,
-    name: '철산자이 더헤리티지',
-    price: { '59': '14억', '84': '17억' },
-    address: '경기 광명시 철산동',
-    lat: 37.482235,
-    lng: 126.869145,
-    polygon: [
-      { lat: 37.484048, lng: 126.866569 },
-      { lat: 37.483713, lng: 126.866618 },
-      { lat: 37.481463, lng: 126.865176 },
-      { lat: 37.48055, lng: 126.867168 },
-      { lat: 37.481643, lng: 126.871997 },
-      { lat: 37.484832, lng: 126.870749 },
-    ],
-    description:
-      '철산동 재건축을 통해 탄생한 대규모 신축 단지입니다. 철산역 역세권, 인근 학군, 광명시 내 주요 편의시설 접근성이 우수합니다.',
-    category: '대장단지',
-  },
-  {
-    id: 2,
-    name: '하안 주공 4단지',
-    price: { '59': '6.3억', '84': '-' },
-    address: '경기도 광명시 하안동',
-    lat: 37.46433,
-    lng: 126.877251,
-    polygon: [
-      { lat: 37.465544, lng: 126.877072 },
-      { lat: 37.463726, lng: 126.878633 },
-      { lat: 37.463403, lng: 126.878330 },
-      { lat: 37.462815, lng: 126.878846 },
-      { lat: 37.462171, lng: 126.877644 },
-      { lat: 37.462741, lng: 126.877131 },
-      { lat: 37.462950, lng: 126.877564 },
-      { lat: 37.464895, lng: 126.875867 }
-    ],
-    description:
-      '하안동 구시가지 중심부에 위치하며, 재건축 이슈가 있는 단지입니다. 인근 하안도서관, 상업지구 이용이 편리합니다.',
-    category: '아파트',
-  },
-  {
-    id: 3,
-    name: '하안 주공 11단지',
-    price: { '59': '(49) 5.9억', '84': '-' },
-    address: '경기도 광명시 하안동',
-    lat: 37.464773,
-    lng: 126.881659,
-    polygon: [
-      { lat: 37.465844, lng: 126.882770 },
-      { lat: 37.464817, lng: 126.883613 },
-      { lat: 37.463274, lng: 126.880906 },
-      { lat: 37.463555, lng: 126.880591 },
-      { lat: 37.463198, lng: 126.879798 },
-      { lat: 37.463934, lng: 126.879281 },
-    ],
-    description:
-      '안현천과 근접하여 쾌적하며, 재건축 이슈가 있는 단지입니다. 주변 공원과 학교가 잘 갖춰져 있어 주거 만족도가 높습니다.',
-    category: '아파트',
-  },
-  {
-    id: 4,
-    name: '하안주공 10단지',
-    price: { '59': '6억', '84': '-' },
-    address: '경기도 광명시 하안동',
-    lat: 37.4652845,
-    lng: 126.87958,
-    polygon: [
-      { lat: 37.465659, lng: 126.877275 },
-      { lat: 37.467082, lng: 126.879894 },
-      { lat: 37.46536, lng: 126.881566 },
-      { lat: 37.46386, lng: 126.878805 },
-    ],
-    description:
-      '하안동 중심 상권 이용이 용이하며, 재건축 이슈가 있는 단지입니다. 대단지로 구성되어 생활 인프라가 풍부합니다.',
-    category: '아파트',
-  },
-  {
-    id: 5,
-    name: '힐스테이트 광명 11R 재개발',
-    price: { '59': '-', '84': '-' },
-    address: '경기도 광명시 하안동',
-    lat: 37.47726,
-    lng: 126.856862,
-    polygon: [
-      { lat: 37.477678, lng: 126.854266 },
-      { lat: 37.47626, lng: 126.853572 },
-      { lat: 37.475021, lng: 126.85965 },
-      { lat: 37.477224, lng: 126.860296 },
-      { lat: 37.478607, lng: 126.855506 },
-      { lat: 37.477511, lng: 126.854924 },
-    ],
-    description:
-      '광명뉴타운의 핵심 구역 중 하나인 광명 11R 구역 재개발을 통해 들어서는 대단지 아파트입니다. 미래 가치가 높게 평가됩니다.',
-    category: '재개발',
-  },
-  {
-    id: 6,
-    name: '철산주공12단지아파트',
-    price: { '59': '10.7억', '84': '12.8억' },
-    address: '경기도 광명시 디지털로 63',
-    lat: 37.475715,
-    lng: 126.872652,
-    polygon: [
-      { lat: 37.476571, lng: 126.870126 },
-      { lat: 37.477607, lng: 126.873866 },
-      { lat: 37.474632, lng: 126.875553 },
-      { lat: 37.473972, lng: 126.871220 }
-    ],
-    description: '철산동 재건축 사업이 완료된 인근 단지들처럼 향후 재건축 잠재력이 높은 곳입니다. 구시가지 상권 접근성이 좋습니다.',
-    category: '아파트',
-  },
-  {
-    id: 7,
-    name: '철산푸르지오하늘채아파트',
-    price: { '59': '10.8억', '84': '11.5억' },
-    address: '경기도 광명시 디지털로 24',
-    lat: 37.472209,
-    lng: 126.869121,
-    polygon: [
-      { lat: 37.473416, lng: 126.867449 },
-      { lat: 37.473749, lng: 126.871130 },
-      { lat: 37.473214, lng: 126.871264 },
-      { lat: 37.473053, lng: 126.870192 },
-      { lat: 37.470424, lng: 126.869923 },
-      { lat: 37.470180, lng: 126.868671 }
-    ],
-    description: '2010년대 초반 입주한 철산동의 비교적 신축급 브랜드 아파트입니다. 광명시청 및 철산역 인근 편의시설 이용이 편리합니다.',
-    category: '아파트',
-  },
-  {
-    id: 8,
-    name: '철산래미안자이아파트',
-    price: { '59': '11.5억', '84': '12억' },
-    address: '경기도 광명시 디지털로 56',
-    lat: 37.471741,
-    lng: 126.874680,
-    polygon: [
-      { lat: 37.473949, lng: 126.873039 },
-      { lat: 37.474053, lng: 126.874370 },
-      { lat: 37.470947, lng: 126.876562 },
-      { lat: 37.469708, lng: 126.873930 },
-      { lat: 37.471297, lng: 126.872879 }
-    ],
-    description: '2009년 입주한 대규모 브랜드 단지입니다. 주변 철산중앙로 상권과 광명시청, 학군이 잘 형성되어 있어 선호도가 높습니다.',
-    category: '아파트',
-  },
-  {
-    id: 9,
-    name: '광명두산위브트레지움아파트',
-    price: { '59': '10.5억', '84': '11.5억' },
-    address: '경기도 광명시 광덕산로 26',
-    lat: 37.469366,
-    lng: 126.872094,
-    polygon: [
-      { lat: 37.470213, lng: 126.870458 },
-      { lat: 37.467679, lng: 126.871452 },
-      { lat: 37.468538, lng: 126.874455 },
-      { lat: 37.470972, lng: 126.872780 }
-    ],
-    description: '하안동에 위치한 살기 좋은 아파트 단지입니다.',
-    category: '아파트',
-  },
-  {
-    id: 10,
-    name: '하안주공1단지아파트',
-    price: { '59': '(49)5억', '84': '-' },
-    address: '경기도 광명시 안현로 15',
-    lat: 37.465607,
-    lng: 126.873368,
-    polygon: [
-      { lat: 37.467280, lng: 126.874136 },
-      { lat: 37.466674, lng: 126.874875 },
-
-      { lat: 37.466055, lng: 126.874669 },
-      { lat: 37.464949, lng: 126.875634 },
-
-      { lat: 37.462754, lng: 126.873060 },
-      { lat: 37.463623, lng: 126.871764 },
-      { lat: 37.464691, lng: 126.872888 }
-    ],
-    description: '하안동의 주공 1단지 아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 11,
-    name: '하안주공2단지아파트',
-    price: { '59': '6억', '84': '-' },
-    address: '경기도 광명시 하안동 681-4',
-    lat: 37.466229,
-    lng: 126.875644,
-    polygon: [
-      { lat: 37.467894, lng: 126.875040 },
-      { lat: 37.465700, lng: 126.876970 },
-      { lat: 37.464997, lng: 126.875728 },
-      { lat: 37.466113, lng: 126.874717 },
-      { lat: 37.466685, lng: 126.874927 },
-      { lat: 37.467471, lng: 126.874289 }
-    ],
-    description: '하안동의 주공 2단지 아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 12,
-    name: '하안주공9단지아파트',
-    price: { '59': '6억', '84': '-' },
-    address: '경기도 광명시 하안로 364',
-    lat: 37.467408,
-    lng: 126.877578,
-    polygon: [
-      { lat: 37.468833, lng: 126.878442 },
-      { lat: 37.467281, lng: 126.879876 },
-      { lat: 37.465846, lng: 126.877121 },
-      { lat: 37.468453, lng: 126.874780 },
-      { lat: 37.468836, lng: 126.875661 },
-      { lat: 37.467964, lng: 126.876470 }
-    ],
-    description: '하안동의 주공 9단지 아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 13,
-    name: '하안주공3단지아파트',
-    price: { '59': '(49)5.1억', '84': '-' },
-    address: '경기도 광명시 안현로 34',
-    lat: 37.462854,
-    lng: 126.875872,
-    polygon: [
-      { lat: 37.464774, lng: 126.875726 },
-      { lat: 37.462975, lng: 126.877250 },
-      { lat: 37.462811, lng: 126.876992 },
-      { lat: 37.462036, lng: 126.877538 },
-      { lat: 37.461133, lng: 126.875526 },
-      { lat: 37.462050, lng: 126.874190 },
-      { lat: 37.462534, lng: 126.875150 },
-      { lat: 37.463735, lng: 126.874274 },
-      { lat: 37.464407, lng: 126.874935 }
-    ],
-    description: '하안동의 주공 3단지 아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 14,
-    name: '하안주공6단지아파트',
-    price: { '59': '(49)6억', '84': '-' },
-    address: '경기도 광명시 금당로 11',
-    lat: 37.460095,
-    lng: 126.877992,
-    polygon: [
-      { lat: 37.461113, lng: 126.878279 },
-      { lat: 37.460234, lng: 126.878905 },
-      { lat: 37.459048, lng: 126.878987 },
-      { lat: 37.458621, lng: 126.877987 },
-      { lat: 37.460262, lng: 126.876565 }
-    ],
-    description: '하안동의 주공 6단지 아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 15,
-    name: '하안주공7단지아파트',
-    price: { '59': '6억', '84': '-' },
-    address: '경기도 광명시 금당로 13',
-    lat: 37.459665,
-    lng: 126.880437,
-    polygon: [
-      { lat: 37.461126, lng: 126.880858 },
-      { lat: 37.459417, lng: 126.882218 },
-      { lat: 37.458273, lng: 126.880070 },
-      { lat: 37.459341, lng: 126.879112 },
-      { lat: 37.460293, lng: 126.879209 }
-    ],
-    description: '하안동의 주공 7단지 아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 16,
-    name: '하안주공13단지아파트',
-    price: { '59': '-', '84': '-' },
-    address: '경기도 광명시 하안로 237',
-    lat: 37.459011,
-    lng: 126.884651,
-    polygon: [
-      { lat: 37.461044, lng: 126.885581 },
-      { lat: 37.460701, lng: 126.885872 },
-      { lat: 37.460243, lng: 126.884941 },
-      { lat: 37.459691, lng: 126.885344 },
-      { lat: 37.459037, lng: 126.885266 },
-      { lat: 37.458860, lng: 126.886110 },
-      { lat: 37.458106, lng: 126.885955 },
-      { lat: 37.458310, lng: 126.885016 },
-      { lat: 37.457770, lng: 126.883986 },
-      { lat: 37.459375, lng: 126.882618 }
-    ],
-    description: '하안동의 주공 13단지 아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 17,
-    name: '하안주공8단지아파트',
-    price: { '59': '6억', '84': '8.5억' },
-    address: '경기도 광명시 하안로 237',
-    lat: 37.457481,
-    lng: 126.882263,
-    polygon: [
-      { lat: 37.459267, lng: 126.882377 },
-      { lat: 37.456357, lng: 126.884972 },
-      { lat: 37.455902, lng: 126.883290 },
-      { lat: 37.456501, lng: 126.882857 },
-      { lat: 37.456567, lng: 126.880546 },
-      { lat: 37.457001, lng: 126.881064 },
-      { lat: 37.458077, lng: 126.880173 }
-    ],
-    description: '하안동의 주공 8단지 아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 18,
-    name: '독산주공14단지아파트',
-    price: { '59': '5.2억', '84': '7억' },
-    address: '서울특별시 금천구 한내로 69-54',
-    lat: 37.460016,
-    lng: 126.886727,
-    polygon: [
-      { lat: 37.461236, lng: 126.886794 },
-      { lat: 37.460077, lng: 126.887799 },
-      { lat: 37.459352, lng: 126.886518 },
-      { lat: 37.459493, lng: 126.885554 },
-      { lat: 37.459817, lng: 126.885528 },
-      { lat: 37.460332, lng: 126.885115 }
-    ],
-    description: '독산동의 주공 14단지 아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 19,
-    name: '독산주공13단지아파트',
-    price: { '59': '5.5억', '84': '7억' },
-    address: '서울특별시 금천구 독산로 283',
-    lat: 37.457962,
-    lng: 126.886956,
-    polygon: [
-      { lat: 37.459012, lng: 126.886934 },
-      { lat: 37.457415, lng: 126.888228 },
-      { lat: 37.456762, lng: 126.886421 },
-      { lat: 37.457761, lng: 126.885876 },
-      { lat: 37.458860, lng: 126.886353 }
-    ],
-    description: '독산동의 주공 13단지 아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 20,
-    name: '철산주공13단지아파트',
-    price: { '59': '-', '84': '13.5억' },
-    address: '경기도 광명시 철산동',
-    lat: 37.479170,
-    lng: 126.870053,
-    polygon: [
-      { lat: 37.480511, lng: 126.867960 },
-      { lat: 37.476807, lng: 126.869441 },
-      { lat: 37.477693, lng: 126.872434 },
-      { lat: 37.478570, lng: 126.871952 },
-      { lat: 37.478936, lng: 126.873314 },
-      { lat: 37.481439, lng: 126.872123 }
-    ],
-    description: '철산동의 주공 13단지 아파트입니다.',
-    category: '대장단지',
-  },
-  {
-    id: 21,
-    name: '하안주공12단지아파트',
-    price: { '59': '6.8억', '84': '10억' },
-    address: '경기도 광명시 하안동',
-    lat: 37.461269,
-    lng: 126.881029,
-    polygon: [
-      { lat: 37.460269, lng: 126.880029 },
-      { lat: 37.462269, lng: 126.880029 },
-      { lat: 37.462269, lng: 126.882029 },
-      { lat: 37.460269, lng: 126.882029 },
-    ],
-    description: '하안동의 주공 12단지 아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 22,
-    name: '광명브라운스톤 1차아파트',
-    price: {},
-    address: '경기도 광명시 도덕공원로 49',
-    lat: 37.473461823578,
-    lng: 126.86513773506,
-    polygon: [],
-    description: '광명브라운스톤 1차아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 23,
-    name: '광명브라운스톤 2차아파트',
-    price: {},
-    address: '경기도 광명시 도덕공원로 35',
-    lat: 37.472340567072,
-    lng: 126.86532150639,
-    polygon: [],
-    description: '광명브라운스톤 2차아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 24,
-    name: '도덕파크타운2단지아파트',
-    price: {},
-    address: '경기도 광명시 도덕공원로 17',
-    lat: 37.470929801125,
-    lng: 126.86614976778,
-    polygon: [],
-    description: '도덕파크타운2단지아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 25,
-    name: '광명e편한세상 센트레빌아파트',
-    price: {},
-    address: '경기도 광명시 오리로 801',
-    lat: 37.470001927164,
-    lng: 126.86831653305,
-    polygon: [],
-    description: '광명e편한세상 센트레빌아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 26,
-    name: '광명하안현대 1단지 아파트',
-    price: {},
-    address: '경기도 광명시 가림일로 55',
-    lat: 37.467257861423,
-    lng: 126.864374245,
-    polygon: [],
-    description: '광명하안현대 1단지 아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 27,
-    name: '하안주공 5단지 아파트',
-    price: {},
-    address: '경기도 광명시 가림로 38',
-    lat: 37.464143905016,
-    lng: 126.86669308369,
-    polygon: [],
-    description: '하안주공 5단지 아파트입니다.',
-    category: '아파트',
-  },
-  {
-    id: 28,
-    name: '철산센트럴푸르지오 아파트',
-    price: {},
-    address: '경기도 광명시 오리로 835',
-    lat: 37.476, // Placeholder, needs to be updated
-    lng: 126.867, // Placeholder, needs to be updated
-    polygon: [],
-    description: '철산센트럴푸르지오 아파트입니다.',
-    category: '아파트',
-  }
-];
-
-const apartmentData: ApartmentDataByDate = {
-  '2025-11-13': JSON.parse(JSON.stringify(initialApartments)),
-  '2025-11-12': JSON.parse(JSON.stringify(initialApartments)),
-  '2025-11-11': JSON.parse(JSON.stringify(initialApartments)),
-};
-
-// Demo data modification
-const dataFor12 = apartmentData['2025-11-12'];
-if (dataFor12?.[0]?.price) {
-  dataFor12[0].price['59'] = '13.8억';
-  dataFor12[0].price['84'] = '16.8억';
-}
-const dataFor11 = apartmentData['2025-11-11'];
-if (dataFor11?.[0]?.price) {
-  dataFor11[0].price['59'] = '13.5억';
-  dataFor11[0].price['84'] = '16.5억';
-}
-
-const latestApartments = apartmentData['2025-11-13'] || [];
-
 const MapPage: React.FC = () => {
   const [selectedApartment, setSelectedApartment] = useState<Apartment | null>(
     null
   );
 
+  const { data: apartments = [], isLoading } = useQuery({
+    queryKey: ['apartments'],
+    queryFn: fetchApartments,
+  });
+
+  // Construct apartmentData for compatibility with existing components
+  // In a real app, this might be fetched separately or structured differently
+  const apartmentData: ApartmentDataByDate = {
+    '2025-11-13': apartments,
+    // Mocking previous dates for now as duplicates of current data
+    // In a real scenario, you'd fetch history or have it in the API response
+    '2025-11-12': apartments,
+    '2025-11-11': apartments,
+  };
+
   const handleSearch = (query: string) => {
     console.log('Search query:', query);
     // Implement search logic here later
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-slate-900 text-white">
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <div className="relative h-screen w-full bg-slate-900 overflow-hidden">
@@ -526,7 +67,7 @@ const MapPage: React.FC = () => {
       {/* Map Background */}
       <div className="absolute inset-0 z-0">
         <NaverMap
-          apartments={latestApartments}
+          apartments={apartments}
           apartmentData={apartmentData}
           selectedApartment={selectedApartment}
           onClearSelection={() => setSelectedApartment(null)}
@@ -536,7 +77,7 @@ const MapPage: React.FC = () => {
 
       {/* Floating UI Elements */}
       <Sidebar
-        apartments={latestApartments}
+        apartments={apartments}
         selectedApartment={selectedApartment}
         onApartmentClick={setSelectedApartment}
       />
