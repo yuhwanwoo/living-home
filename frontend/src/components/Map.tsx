@@ -106,11 +106,11 @@ const NaverMap: React.FC<MapProps> = ({
     polygonsRef.current.forEach((polygon) => polygon.setMap(null));
     polygonsRef.current.clear();
 
-    // Neon Colors
+    // Neon Colors - Updated for better distinction
     const categoryColors = {
-      대장단지: '#38bdf8', // Sky 400 (Neon Blue)
-      재개발: '#2dd4bf', // Teal 400 (Neon Teal)
-      아파트: '#818cf8', // Indigo 400 (Soft Purple)
+      대장단지: '#e879f9', // Fuchsia 400 (Vibrant Purple)
+      재개발: '#fbbf24', // Amber 400 (Bright Orange/Gold)
+      아파트: '#22d3ee', // Cyan 400 (Electric Blue)
     };
 
     apartments.forEach((apt) => {
